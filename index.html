@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+  <title>Snake !</title>
+  <style>
+    .float {
+      float: left;
+    }
+    canvas {
+      border: 1px solid black;
+    }
+    #over {
+      position: absolute;
+      left: 10em;
+      top: 14em;
+      z-index: -1;
+      padding: 1em 2em;
+      background-color: lightgrey;
+      color: red;
+      opacity: 0;
+    }
+    #over.active {
+      z-index: 100;
+      opacity: 1;
+    }
+  </style>
+</head>
+
+<body>
+  <div>Score : <span id="score"></span></div>
+  <div id="display" class="float"></div>
+  <!-- <div class="float">
+      !! High Scores !!
+      <div id="leaderbord"></div>
+  </div> -->
+
+  <div id="over">
+    GAME OVER !!!
+  </div>
+</body>
+
+<script>var exports = {};</script>
+<script type="module" src="./index.js"></script>
+
+</html>
