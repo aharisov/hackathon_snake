@@ -2,58 +2,24 @@ import { Point } from "./Point.js";
 export class Snake extends Point {
     constructor(x, y) {
         super(x, y);
-        this.body = [new Point(x, y)];
-        this.dirX = 'r';
-        this.dirY = '';
+        this.body = [new Point(x - 1, y)];
+        this.direction = 'right';
     }
     getButtonClick() {
         window.addEventListener('keydown', (e) => {
-            if (e.key == 's' && this.dirX == 'r') {
-                this.dirY = 'd';
-                this.dirX = 'rd';
+            if (e.key == 's') {
+                this.direction = 'down';
             }
-            if (e.key == 's' && this.dirX == 'l') {
-                this.dirY = 'd';
-                this.dirX = 'ld';
-            }
-            if (e.key == 'z' && this.dirX == 'r') {
-                this.dirY = 'u';
-                this.dirX = 'ru';
-            }
-            if (e.key == 'z' && this.dirX == 'l') {
-                this.dirY = 'u';
-                this.dirX = 'lu';
+            if (e.key == 'z') {
+                this.direction = 'up';
             }
             if (e.key == 'd') {
-                this.dirX = 'r';
-                this.dirY = '';
+                this.direction = 'right';
             }
             if (e.key == 'q') {
-                this.dirX = 'l';
-                this.dirY = '';
+                this.direction = 'left';
             }
         });
-    }
-    // public getDirection(): string[] {
-    //     return [this.dirX, this.dirY];
-    // }
-    changeDirection() {
-        switch (this.dirX) {
-            case 'r':
-                this.x++;
-                break;
-            case 'l':
-                this.x--;
-                break;
-        }
-        switch (this.dirY) {
-            case 'u':
-                this.y--;
-                break;
-            case 'd':
-                this.y++;
-                break;
-        }
     }
     getBody() {
         return this.body;
@@ -61,43 +27,41 @@ export class Snake extends Point {
     getPosition() {
         return [this.x, this.y];
     }
-    setPosition(x, y) {
-        this.x = x;
-        this.y = y;
+    growHead() {
+        // save (x,y) in body
+        // update x, y depending on direction
+        this.body.push(new Point(this.x, this.y));
+        switch (this.direction) {
+            case 'up':
+                this.y--;
+                break;
+            case 'down':
+                this.y++;
+                break;
+            case 'right':
+                this.x++;
+                break;
+            case 'left':
+                this.x--;
+                break;
+        }
+    }
+    cropTail() {
+        // remove last body part
+        this.body.shift();
+    }
+    move(display, color) {
+        this.growHead();
+        this.cropTail();
+        this.drawSnake(display, color);
     }
     drawSnake(display, color) {
-        if (this.dirX == 'r' && this.dirY == '') {
-            for (let i = 0; i < this.body.length; i++) {
-                display.drawRectangle(this.x - i, this.y, color);
+        display.drawRectangle(this.x, this.y, color);
+        if (this.body.length > 0) {
+            for (let i = this.body.length - 1; i > 0; i--) {
+                display.drawRectangle(this.body[i].getX(), this.body[i].getY(), color);
             }
         }
-        if (this.dirX == 'l' && this.dirY == '') {
-            for (let i = this.body.length - 1; i > -1; i--) {
-                display.drawRectangle(this.x + i, this.y, color);
-            }
-        }
-        if (this.dirX == 'rd' && this.dirY == 'd') {
-            for (let i = 0; i < this.body.length; i++) {
-                display.drawRectangle(this.x, this.y - i, color);
-            }
-        }
-        if (this.dirX == 'ld' && this.dirY == 'd') {
-            for (let i = this.body.length - 1; i > -1; i--) {
-                display.drawRectangle(this.x, this.y - i, color);
-            }
-        }
-        if (this.dirX == 'ru' && this.dirY == 'u') {
-            for (let i = 0; i < this.body.length; i++) {
-                display.drawRectangle(this.x, this.y + i, color);
-            }
-        }
-        if (this.dirX == 'lu' && this.dirY == 'u') {
-            for (let i = this.body.length - 1; i > -1; i--) {
-                display.drawRectangle(this.x, this.y + i, color);
-            }
-        }
-        // console.log('dir', this.dirX, this.dirY);
-        // console.log('x,y', this.x, this.y);
     }
     updateBody(part) {
         this.body.unshift(part);

@@ -10,10 +10,13 @@ export class Game {
         this.apples = [];
         this.generateApples(50);
     }
-    checkSnakePosition() {
+    checkCollision() {
         if (this.snake.getPosition()[0] == -1 || this.snake.getPosition()[0] == 51
             || this.snake.getPosition()[1] == -1 || this.snake.getPosition()[1] == 51) {
             this.gameOver = true;
+        }
+        for (let part of this.snake.getBody()) {
+            console.log('part', part, this.snake.getPosition());
         }
     }
     getScore() {
@@ -21,9 +24,7 @@ export class Game {
     }
     showSnake(display) {
         this.snake.getButtonClick();
-        // this.snake.getDirection();
-        this.snake.changeDirection();
-        this.snake.drawSnake(display, Color.RED);
+        this.snake.move(display, Color.RED);
     }
     generateApples(quantity) {
         for (let i = 1; i < quantity; i++) {
@@ -35,7 +36,7 @@ export class Game {
             apple.drawApple(display);
         }
     }
-    eatApple() {
+    checkAppleEat() {
         for (let apple of this.apples) {
             let snakePosX = this.snake.getPosition()[0];
             let snakePosY = this.snake.getPosition()[1];
@@ -45,7 +46,6 @@ export class Game {
                 this.score++;
             }
         }
-        // console.log('list', this.snake.getBody());
     }
     showGameOver() {
         const popup = document.getElementById("over");
@@ -57,8 +57,8 @@ export class Game {
         display.refreshScore();
         this.showApples(display);
         this.showSnake(display);
-        this.eatApple();
-        this.checkSnakePosition();
+        this.checkAppleEat();
+        this.checkCollision();
         this.showGameOver();
         return this.gameOver;
     }

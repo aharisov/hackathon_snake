@@ -18,10 +18,14 @@ export class Game{
         this.generateApples(50);
     }
     
-    private checkSnakePosition(): void {
+    private checkCollision(): void {
         if (this.snake.getPosition()[0] == -1 || this.snake.getPosition()[0] == 51 
             || this.snake.getPosition()[1] == -1 || this.snake.getPosition()[1] == 51) {
             this.gameOver = true;
+        }
+
+        for (let part of this.snake.getBody()) {
+            console.log('part', part, this.snake.getPosition());
         }
     }
 
@@ -31,9 +35,7 @@ export class Game{
 
     public showSnake(display: Display): void {
         this.snake.getButtonClick();
-        // this.snake.getDirection();
-        this.snake.changeDirection();
-        this.snake.drawSnake(display, Color.RED);
+        this.snake.move(display, Color.RED);
     }
 
     public generateApples(quantity: number): void {
@@ -48,7 +50,7 @@ export class Game{
         }
     }
 
-    public eatApple(): void {
+    public checkAppleEat(): void {
         for (let apple of this.apples) {
             let snakePosX: number = this.snake.getPosition()[0];
             let snakePosY: number = this.snake.getPosition()[1];
@@ -57,12 +59,10 @@ export class Game{
                 this.apples = this.apples.filter(e => !(e.getX() == snakePosX && e.getY() == snakePosY))
 
                 this.snake.updateBody(new Point(snakePosX, snakePosY));
-
                 
                 this.score++;
             }
         }
-        // console.log('list', this.snake.getBody());
     }
 
     public showGameOver(): void {
@@ -78,9 +78,8 @@ export class Game{
         
         this.showApples(display);
         this.showSnake(display);
-
-        this.eatApple();
-        this.checkSnakePosition();
+        this.checkAppleEat();
+        this.checkCollision();
         this.showGameOver();
         return this.gameOver;
     }
