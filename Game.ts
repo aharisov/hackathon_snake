@@ -56,7 +56,7 @@ export class Game{
             if (apple.getX() == snakePosX && apple.getY() == snakePosY) {
                 this.apples = this.apples.filter(e => !(e.getX() == snakePosX && e.getY() == snakePosY))
 
-                this.snake.updateBody(new Point(snakePosX+1, snakePosY));
+                this.snake.updateBody(new Point(snakePosX, snakePosY));
 
                 
                 this.score++;

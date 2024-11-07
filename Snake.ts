@@ -17,14 +17,24 @@ export class Snake extends Point {
     public getButtonClick() {
         window.addEventListener('keydown', (e) => {
             
-            if (e.key == 's') {
+            if (e.key == 's' && this.dirX == 'r') {
                 this.dirY = 'd';
-                this.dirX = '';
+                this.dirX = 'rd';
             }
 
-            if (e.key == 'z') {
+            if (e.key == 's' && this.dirX == 'l') {
+                this.dirY = 'd';
+                this.dirX = 'ld';
+            }
+
+            if (e.key == 'z' && this.dirX == 'r') {
                 this.dirY = 'u';
-                this.dirX = '';
+                this.dirX = 'ru';
+            }
+
+            if (e.key == 'z' && this.dirX == 'l') {
+                this.dirY = 'u';
+                this.dirX = 'lu';
             }
 
             if (e.key == 'd') {
@@ -85,16 +95,32 @@ export class Snake extends Point {
                 display.drawRectangle(this.x + i, this.y, color);
             }
         }
-        if (this.dirX == '' && (this.dirY == 'u' || this.dirY == 'd')) {
+        if (this.dirX == 'rd' && this.dirY == 'd') {
             for (let i = 0; i < this.body.length; i++) {
-                display.drawRectangle(this.x - i, this.y+1, color);
+                display.drawRectangle(this.x, this.y - i, color);
+            }
+        }
+        if (this.dirX == 'ld' && this.dirY == 'd') {
+            for (let i = this.body.length - 1; i > -1; i--) {
+                display.drawRectangle(this.x, this.y - i, color);
+            }
+        }
+        if (this.dirX == 'ru' && this.dirY == 'u') {
+            for (let i = 0; i < this.body.length; i++) {
+                display.drawRectangle(this.x, this.y + i, color);
+            }
+        }
+        if (this.dirX == 'lu' && this.dirY == 'u') {
+            for (let i = this.body.length - 1; i > -1; i--) {
+                display.drawRectangle(this.x, this.y + i, color);
             }
         }
 
-        console.log('head pos', this.x, this.y);
+        // console.log('dir', this.dirX, this.dirY);
+        // console.log('x,y', this.x, this.y);
     }
 
     public updateBody(part: Point): void {
-        this.body.push(part);
+        this.body.unshift(part);
     }
 }
